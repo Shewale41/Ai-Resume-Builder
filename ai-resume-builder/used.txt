@@ -1,0 +1,11 @@
+shadcdn-ui components
+tailwind css- styling
+clerk - authentication 
+react router dom->for routing 
+logoipsum - for awesome logo svgs
+strapi - backend
+neon - for database creation and management (postgreSql)
+database - postgresql
+lucidicon - for icons (already present inside the shadcdn)
+axios - http client (api calls)
+
