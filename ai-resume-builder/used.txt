@@ -8,4 +8,4 @@ neon - for database creation and management (postgreSql)
 database - postgresql
 lucidicon - for icons (already present inside the shadcdn)
 axios - http client (api calls)
-
+primary colour to use for tailwind - #9156ff
