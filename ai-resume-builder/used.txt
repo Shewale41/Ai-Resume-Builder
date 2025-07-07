@@ -10,3 +10,4 @@ lucidicon - for icons (already present inside the shadcdn)
 axios - http client (api calls)
 primary colour to use for tailwind - #9156ff
 context folder - to share data bewteen different componenets (from form to preview seaction to live display)
+pending - my toast inst working after clicking save debug it later 

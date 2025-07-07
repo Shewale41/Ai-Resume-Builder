@@ -14,7 +14,7 @@ function EditResume() {
     },[])
 
   return (
-    <ResumeInfoContext.Provider value={{}}>
+    <ResumeInfoContext.Provider value={{resumeInfo,setResumeInfo}}>
     {/*here we building resume form along with live preview of resume */}
     <div className='grid grid-cols-1 md:grid-cols-2 p-10 gap-10'>
       {/* Form Section  */}
