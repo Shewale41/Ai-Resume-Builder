@@ -6,7 +6,7 @@ function EducationPreview({resumeInfo}) {
       <h2 className='text-center font-semibold text-md ' style={{color:resumeInfo?.themeColor}}>Education</h2>
       <hr className=' my-1 ' style={{borderColor:resumeInfo?.themeColor}}></hr>
       {
-        resumeInfo?.education.map((education,index)=>(
+        (resumeInfo?.education || []).map((education,index)=>(
             <div key={index} className='my-5'>
                 <h2 className='text-sm font-bold ' style={{color:resumeInfo?.themeColor}}>{education?.universityName}</h2>
                 <h2 className='text-xs flex justify-between'>

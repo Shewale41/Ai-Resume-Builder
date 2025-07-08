@@ -36,7 +36,7 @@ function PersonalDetailForm({enableNext}) {
     const onSave=(e)=>{
       e.preventDefault();
       setLoading(true);
-      const data={
+      const data={ 
         data:formData
       }
       GlobalApi.UpdateResumeDetail(params?.resumeId,data).then(resp=>{
