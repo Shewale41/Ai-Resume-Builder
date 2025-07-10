@@ -1,68 +1,63 @@
+import { Button } from '@/components/ui/button';
+import { ResumeInfoContext } from '@/context/ResumeInfoContext';
 import { Brain, LoaderCircle } from 'lucide-react';
 import React, { useContext, useState } from 'react'
-import { BtnBold, BtnBulletList, BtnClearFormatting, BtnItalic, BtnLink, BtnNumberedList, BtnStrikeThrough, BtnUnderline, Editor, EditorProvider, Separator, Toolbar } from 'react-simple-wysiwyg'
-import { Button } from '../button';
-import { ResumeInfoContext } from '@/context/ResumeInfoContext';
+import { BtnBold, BtnBulletList, BtnClearFormatting, BtnItalic, BtnLink, BtnNumberedList, BtnStrikeThrough, BtnStyles, BtnUnderline, Editor, EditorProvider, HtmlButton, Separator, Toolbar } from 'react-simple-wysiwyg'
+import { AIChatSession } from './../../../../Service/AIModal';
 import { toast } from 'sonner';
-import { AIChatSession } from '../../../../Service/AIModal';
-
-function RichTextEditor({ value, onRichTextEditorChange, index }) {
-
-    const {resumeInfo,setResumeInfo}=useContext(ResumeInfoContext);
+const PROMPT='position titile: {positionTitle} , Depends on position title give me 5-7 bullet points for my experience in resume (Please do not add experince level and No JSON array) , give me result in HTML tags'
+function RichTextEditor({onRichTextEditorChange, value, index}) {
+    const {resumeInfo,setResumeInfo}=useContext(ResumeInfoContext)
     const [loading,setLoading]=useState(false);
-    const  PROMPT ="job title : {positionTitle} depends on position title give me 4-5 bullet points for my work experince in resume , give me the result in html fromat"
-
-    const GenerateSummaryWithAi=async()=>{
-      setLoading(true);
-      if(!resumeInfo.experience[index].title){
-        toast('Please Add position title');
-        return;
+    const GenerateSummeryFromAI=async()=>{
+     
+      if(!resumeInfo?.experience[index]?.title)
+      {
+        toast('Please Add Position Title');
+        return ;
       }
+      setLoading(true)
       const prompt=PROMPT.replace('{positionTitle}',resumeInfo.experience[index].title);
-      const result = await AIChatSession.sendMessage(prompt);
-      console.log(result.response.text());
-      const resp = JSON.parse(result.response.text());
-      console.log('AI Response:', resp);
-      let aiText = '';
-      if (Array.isArray(resp)) {
-        aiText = resp[0];
-      } else if (typeof resp === 'object' && resp !== null && resp.text) {
-        aiText = resp.text;
-      } else if (typeof resp === 'string') {
-        aiText = resp;
-      }
-      onRichTextEditorChange({ target: { value: aiText } }, 'workSummary', index);
-      setLoading(false);      
+      
+      const result=await AIChatSession.sendMessage(prompt);
+      const resp=await result.response.text()
+      onRichTextEditorChange({ target: { value: resp.replace('[','').replace(']','') } });
+      setLoading(false);
     }
-
-  return (
+  
+    return (
     <div>
-            
-              <div className='flex justify-between my-2'>
-                <label className='text-xs'>Summary</label>
-                <Button variant="outline" size="sm"  
-                className="flex gap-2 border-[#9156ff] text-[#9156ff]" onClick={GenerateSummaryWithAi} >
-                  {
-                  loading?<LoaderCircle className="animate-spin" />:<><Brain/>Generate With AI</>
-                  }
-                  </Button>
-              </div>
-            <EditorProvider>
-                <Editor value={value} onChange={e => onRichTextEditorChange(e, 'workSummary', index)}>
-                <Toolbar>
-                <BtnBold />
-                <BtnItalic />
-                <BtnUnderline />
-            <BtnStrikeThrough />
-            <Separator />
-            <BtnNumberedList />
-            <BtnBulletList />
-            <Separator />
-            <BtnLink />
-            <BtnClearFormatting />
-            </Toolbar>
-            </Editor>    
-            </EditorProvider>
+      <div className='flex justify-between my-2'>
+        <label className='text-xs'>Summery</label>
+        <Button variant="outline" size="sm" 
+        onClick={GenerateSummeryFromAI}
+        disabled={loading}
+        className="flex gap-2 border-primary text-primary">
+          {loading?
+          <LoaderCircle className='animate-spin'/>:  
+          <>
+           <Brain className='h-4 w-4'/> Generate from AI 
+           </>
+        }
+         </Button>
+      </div>
+    <EditorProvider>
+      <Editor value={value} onChange={onRichTextEditorChange}>
+         <Toolbar>
+          <BtnBold />
+          <BtnItalic />
+          <BtnUnderline />
+          <BtnStrikeThrough />
+          <Separator />
+          <BtnNumberedList />
+          <BtnBulletList />
+          <Separator />
+          <BtnLink />
+         
+         
+        </Toolbar>
+      </Editor>
+      </EditorProvider>
     </div>
   )
 }
